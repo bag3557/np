@@ -7,6 +7,7 @@ import { logout } from '../../actions/users'
 
 class Header extends Component{
 
+    /*  This will call a logout function  */
     onClick = e => {
         e.preventDefault()
         this.props.logout()
@@ -22,6 +23,9 @@ class Header extends Component{
                     <h5>News Portal</h5>
                 </Menu.Item>
             </Menu.Menu>
+
+            {/*  If User is logged in then it will render user name and a logout button in the menu bar */}
+            
             {isAuthenticated &&<Menu.Menu position="right">
                 <Menu.Item name="name">
                     <h5>{name}</h5>

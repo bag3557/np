@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Segment, Accordion } from 'semantic-ui-react'
 
+/*  This component will render each news layout 
+*   This  takes each news object and index of it from the fethced news list
+*/
 class News extends Component {
     constructor(props){
         super(props)
@@ -10,11 +13,13 @@ class News extends Component {
         }        
     }
 
+    /*  This function is to open a news 
+    *   
+    */
     handleClick = (e, titleProps) => {
         const { index } = titleProps
         const { activeIndex } = this.state
-        const newIndex = activeIndex === index ? -1 : index
-    
+        const newIndex = activeIndex === index ? -1 : index    
         this.setState({ activeIndex: newIndex })
     }
 

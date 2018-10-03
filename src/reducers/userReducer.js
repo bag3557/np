@@ -1,5 +1,6 @@
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from "../actions/types";
 
+/* This is a user reducer for login and logout events */
 export default function user (state = {}, action = {}) {
   switch (action.type) { 
     case USER_LOGGED_IN:

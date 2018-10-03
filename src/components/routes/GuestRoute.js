@@ -3,6 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 
+/*  This is a HOC
+*   It will check if user is exist/logged-in or not
+*   If user is logged-in, it will render news page
+*   If user is not logged in, it will redirect to login page
+*/
 const GuestRoute = ({ isAuthenticated, component: Component, ...rest}) => {
   return (
     <Route 

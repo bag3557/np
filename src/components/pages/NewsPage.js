@@ -19,10 +19,12 @@ class NewsPage extends Component {
         }
     }
 
+    /*  This will call fetchNews function which will call news API */
     async componentDidMount() {
         this.props.fetchNews()
     }
 
+    /*  This function is to set state after getting news list */
     componentWillReceiveProps(nextProps){
         this.setState({loading: false, newsLocal: nextProps.newsList.news})
     }
@@ -41,25 +43,32 @@ class NewsPage extends Component {
                     return news[k]
         }).filter(function( element ) {
             return element !== undefined;
-        })
-        this.setState({newsLocal: newsFilter}) 
-        this.setState({currentPage: 1})                
+        }) 
+        this.setState({newsLocal: newsFilter, currentPage: 1})                
     }
 
+    /*  This function will to set page number in component state after page change from pagination  */
     handlePageChange = (e, { activePage }) => {
         this.setState({currentPage: activePage})        
     }
 
     render() {
         const { loading, newsLocal, currentPage } = this.state
+
+        /*  To get total news count */
         var newsCount = 0, key
-        var countPerPage = 10
         for (key in newsLocal) {
             newsCount++;
         }
+
+        /*  To get total pages according to news count */
+        var countPerPage = 10
         const totalPages = Math.ceil(newsCount/countPerPage)
+
+        /*  To get starting index of news according to page */
         const start_offset = (currentPage-1)*countPerPage
-        let start_count=0
+
+        let start_count = 0
         
         return(
             <div className="ui center aligned segment" style={{justifyContent: 'center', margin:'2rem 0'}}>
@@ -67,13 +76,21 @@ class NewsPage extends Component {
                 <h1 className="ui header">
                     News List
                 </h1>
+
+                {/*  This will show loading animation till FETCH_NEWS gets the result */}
                 {loading && <Loading />}
                 
+                {/*  This will render search box only if there are some news in the component state */}
                 {newsLocal && <Input icon='search' style={{margin:'0 5% auto'}} fluid={true} placeholder='Search...' onChange={this.onNewsSearch}/>}
 
+                {/* This will render pagination buttons only if there are some news in the component state 
+                *   The button count will be according to the newscount 
+                */}
                 {newsLocal && <Pagination activePage={currentPage} totalPages={totalPages} onPageChange={this.handlePageChange}/>}
 
-
+                {/* This will render each news only if there are some news in the component state 
+                *   The news count will be according to the total news on that page 
+                */}
                 {newsLocal && Object.keys(newsLocal).map(function(value, key){   
                     if(key >= start_offset && start_count < countPerPage)   {
                         start_count++
@@ -81,6 +98,14 @@ class NewsPage extends Component {
                     }                   
                 })}
 
+
+                {/* This will render pagination buttons only if there are some news in the component state 
+                *   The button count will be according to the newscount 
+                */}
+                {newsLocal && <Pagination activePage={currentPage} totalPages={totalPages} onPageChange={this.handlePageChange}/>}
+
+                {/* This will show message, till there is no news in local news object
+                */}
                 {!newsLocal && <Segment><p>No news for your search</p></Segment>}
                 
             </div>

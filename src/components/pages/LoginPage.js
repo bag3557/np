@@ -7,8 +7,11 @@ import { Message } from 'semantic-ui-react'
 
 import { socialLogin } from '../../actions/users'
 import Header from '../layout/Header'
-import Loading from '../messages/Loading'
 
+
+/*  styles for GoogleLogin button 
+*   this css same sa FacebookLogin button with red background
+*/
 const google ={
     fontFamily: 'Helvetica,sans-serif',
     fontWeight: '700',
@@ -29,13 +32,16 @@ class LoginPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: false,
             errors: {}
         }
     }
 
-    responseGoogle = (response) => {                
-        this.setState({ loading: true });
+    /*  This function is to catch Google response for login
+    *   It takes response object
+    *   If there is any error occured while logging with google, 
+    *   this will trigger error on screen, else redirect to login screen
+    */
+    responseGoogle = (response) => {      
         if(response.accessToken===undefined) this.loginFailure(response)
         else {
             var profile ={}
@@ -51,8 +57,12 @@ class LoginPage extends Component {
         }
     }
 
-    responseFacebook = (response) => {                
-        this.setState({ loading: true });        
+    /*  This function is to catch Facebook response for login
+    *   It takes response object
+    *   If there is any error occured while logging with google, 
+    *   this will trigger error on screen, else redirect to login screen
+    */
+    responseFacebook = (response) => {           
         if(response.accessToken===undefined) this.loginFailure(response)
         else { 
             var profile ={}
@@ -68,53 +78,53 @@ class LoginPage extends Component {
         }
     }
 
+    /*  This function will execute successful login
+    *   This will redirect to news
+    */
     loginSuccess = profile => {
         this.setState({ loading: false });
         this.props.socialLogin(profile)
         this.props.history.push('/news')
     }
 
+    /*  This function will execute unsuccessful login
+    *   This will trigger an error
+    */
     loginFailure = errResponse => {
         const errorsOccured = {}
         errorsOccured.error = 'Something went wrong'            
-        this.setState({ loading: false, errors: errorsOccured });
+        this.setState({ errors: errorsOccured });
     }
     
     render() {
-        const { loading, errors } = this.state;
-        
+        const { errors } = this.state;
+
         return (
             <div className="ui center aligned segment" style={{justifyContent: 'center'}}>
 
-            <Header />
-
-            {loading ? <Loading type='spin' color='#ff0022' />
-                :   (<div>
-                        <h1 className="ui header">
-                            Login Page
-                        </h1>
-                        <GoogleLogin 
-                            clientId="704079547447-pplekl5th15resoqe50krt1gl821fohm.apps.googleusercontent.com"
-                            scope="profile"
-                            buttonText="Login With Google"
-                            onSuccess={this.responseGoogle}
-                            onFailure={this.responseGoogle}
-                            style={google}/>
-                        <FacebookLogin
-                            appId="1883221665093689"
-                            autoLoad={false}
-                            fields="name,email,picture"
-                            callback={this.responseFacebook}/>
-                    </div>)
-                }
+                <Header />
+                <h1 className="ui header">
+                    Login Page
+                </h1>
+                <GoogleLogin 
+                    clientId="704079547447-pplekl5th15resoqe50krt1gl821fohm.apps.googleusercontent.com"
+                    scope="profile"
+                    buttonText="Login With Google"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    style={google}/>
+                <FacebookLogin
+                    appId="1883221665093689"
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    callback={this.responseFacebook}/>
                 <br />
-            <div>
-                {!!errors.error && <Message negative>
-                    <Message.Header>Something went wrong</Message.Header>
-                    <p>{errors.global}</p>
-                    </Message>}
+                {/* If there is any error in login, it will trigger an error message */}
+                    {!!errors.error && <Message negative>
+                        <Message.Header>Something went wrong, please try again...</Message.Header>
+                        <p>{errors.global}</p>
+                        </Message>}
             </div>
-        </div>
         )
     }
 }

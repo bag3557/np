@@ -21,7 +21,7 @@ const store = createStore(
 );
 
 if(localStorage.newsJWT) {
-    const userProfile = { token: localStorage.newsJWT};
+    const userProfile = { token: localStorage.newsJWT, email: localStorage.email, name: localStorage.name};
     store.dispatch(userLoggedIn(userProfile));
     history.push('/news')
 }

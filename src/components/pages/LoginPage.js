@@ -6,6 +6,7 @@ import FacebookLogin from 'react-facebook-login'
 import { Message } from 'semantic-ui-react'
 
 import { socialLogin } from '../../actions/users'
+import Header from '../layout/Header'
 import Loading from '../messages/Loading'
 
 const google ={
@@ -84,6 +85,9 @@ class LoginPage extends Component {
         
         return (
             <div className="ui center aligned segment" style={{justifyContent: 'center'}}>
+
+            <Header />
+
             {loading ? <Loading type='spin' color='#ff0022' />
                 :   (<div>
                         <h1 className="ui header">
